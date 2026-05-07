@@ -33,7 +33,7 @@ def check_vc_backed(x):
     return 1 if str(x).strip().upper() in ['TRUE', '1', '1.0', 'YES', 'Y'] else 0
 df['VC_backed'] = get_col(df, 'Venture Capital Backed IPO Issue Flag').apply(check_vc_backed)
 
-# 5. Firm Commitment
+# 5. Firm_Commitment
 def check_firm_commitment(tech):
     if pd.isna(tech):
         return np.nan
