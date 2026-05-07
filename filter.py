@@ -11,7 +11,15 @@ def filter_columns():
 
         if missing_cols:
             print(f"警告：以下欄位未在檔案中找到，將被跳過：\n{missing_cols}")
-
+        
+        if "Original IPO Flag" in df.columns:
+            initial_count = len(df)
+            df = df[df["Original IPO Flag"].astype(str) == "True"]
+            final_count = len(df)
+            print(f"加入條件：Original IPO Flag == True 後，從 {initial_count} 行過濾至 {final_count} 行")
+        else:
+            print("警告：找不到 'Original IPO Flag' 欄位，無法進行行過濾。")
+        
         df_filtered = df[existing_cols]
 
         df_filtered.to_excel(config.FILTERED_OUTPUT, index=False)
