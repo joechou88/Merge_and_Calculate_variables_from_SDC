@@ -7,6 +7,17 @@ FILTERED_OUTPUT = "Filtered_All_countries_SDC_2015-2024.xlsx"
 CALCULATED_OUTPUT = "Calculated_All_countries_SDC_2015-2024.xlsx"
 TOP25_UNDERWRITERS = "Top-25-lead-underwriter-league-table_Proceeds-Amount-All-Markets-(USD Millions).xlsx"
 
+# Filter country
+EXCLUDE_COUNTRIES = [
+    "Ireland",
+    "Japan",
+    "China",
+    "India",
+    "Indonesia",
+    "Switzerland",
+    "Vietnam"
+]
+
 # Filter columns
 TARGET_COLUMNS = [
     "Dates: Issue Date",

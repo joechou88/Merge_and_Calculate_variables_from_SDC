@@ -26,6 +26,9 @@ def merge_xlsx():
             df = df[df[year_col].between(config.START_YEAR, config.END_YEAR)]
             if not df.empty:
                 country_name = os.path.splitext(os.path.basename(file))[0].split('_')[0]
+                if country_name in config.EXCLUDE_COUNTRIES:
+                    print(f"排除國家: {country_name} ({file})")
+                    continue
                 df.insert(loc=4, column='Country', value=country_name)
                 all_sheets.append(df)
                 print(f"成功處理: {file}")
