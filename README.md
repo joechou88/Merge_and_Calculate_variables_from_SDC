@@ -5,7 +5,7 @@
 
 ## Python Scripts
 #### 1. Country Integration (`merge.py`)
-- **Objective**: combine all country files to one single `Merged_All_countries_SDC_2015-2024.xlsx`
+- **Objective**: combine all country files in `SDC_xlsx` folder to one single `Merged_All_countries_SDC_2015-2024.xlsx`
 - **Output**: `Merged_All_countries_SDC_2015-2024.xlsx`
 #### 2. Columns Filtering (`filter.py`)
 - **Objective**: filter dataframe columns to retain only the predefined `TARGET_COLUMNS`
