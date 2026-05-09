@@ -39,7 +39,7 @@ def check_firm_commitment(tech):
         return np.nan
     tech_str = str(tech).upper().replace(" ", "")
     return 1 if 'FIRMCOMMITMENT' in tech_str else 0
-df['Firm Commitment'] = get_col(df, 'Offering Technique').apply(check_firm_commitment)
+df['Firm_Commitment'] = get_col(df, 'Offering Technique').apply(check_firm_commitment)
 
 # 6. Underwriter_Reputation
 def check_reputation(bookrunner):
@@ -80,7 +80,7 @@ df_grouped = df.groupby(group_keys).agg({
     'Underpricing': 'first',                # 取當年的第一筆紀錄
     'Ln_Age': 'first',                      # 通常年齡在同一年內不會差異太大，取第一筆
     'VC_backed': 'max',                     # 其中一筆是 1 即為 1，通常不會忽 0 忽 1
-    'Firm Commitment': 'max',               # 其中一筆是 1 即為 1，通常不會忽 0 忽 1
+    'Firm_Commitment': 'max',               # 其中一筆是 1 即為 1，通常不會忽 0 忽 1
     'Underwriter_Reputation': 'max',        # 其中一筆是 1 即為 1，通常不會忽 0 忽 1
     'Integer_Offer_Price': 'max',           # 其中一筆是 1 即為 1，通常不會忽 0 忽 1
     'Proceeds_Amount_All_Markets': 'sum',   # 加總當年所有 Proceeds_Amount，作為 Relative_Offer_Size 的分子
