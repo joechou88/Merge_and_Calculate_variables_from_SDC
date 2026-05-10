@@ -1,12 +1,16 @@
+SHEET_NAME = 'Request 3'
+START_YEAR = 2015
+END_YEAR = 2024
+
 # Folder name
 SDC_FOLDER = "SDC_xlsx"
 
 # File name
-MERGED_OUTPUT = "Merged_All_countries_SDC_2015-2024.xlsx"
-FILTERED_OUTPUT = "Filtered_All_countries_SDC_2015-2024.xlsx"
+MERGED_OUTPUT = f"Merged_All_countries_SDC_{START_YEAR}-{END_YEAR}.xlsx"
+FILTERED_OUTPUT = f"Filtered_All_countries_SDC_{START_YEAR}-{END_YEAR}.xlsx"
 DUPLICATED_OUTPUT = "Duplicated_company_list.xlsx"
-UNIQUE_OUTPUT     = "Unique_All_countries_SDC_2015-2024.xlsx"
-CALCULATED_OUTPUT = "Calculated_All_countries_SDC_2015-2024.xlsx"
+UNIQUE_OUTPUT     = f"Unique_All_countries_SDC_{START_YEAR}-{END_YEAR}.xlsx"
+CALCULATED_OUTPUT = f"Calculated_All_countries_SDC_{START_YEAR}-{END_YEAR}.xlsx"
 TOP25_UNDERWRITERS = "Top-25-lead-underwriter-league-table_Proceeds-Amount-All-Markets-(USD Millions).xlsx"
 
 # Filter country
@@ -39,8 +43,3 @@ TARGET_COLUMNS = [
     "ISIN",
     "Datastream"
 ]
-
-# Other params
-SHEET_NAME = 'Request 3'
-START_YEAR = 2015
-END_YEAR = 2024

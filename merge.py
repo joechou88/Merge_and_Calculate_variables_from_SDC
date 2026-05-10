@@ -33,7 +33,7 @@ def merge_xlsx():
                 all_sheets.append(df)
                 print(f"成功處理: {file}")
             else:
-                print(f"跳過檔案: {file} (找不到名為 'Request 3' 的工作表 or 無 2015-2024 之資料)")            
+                print(f"跳過檔案: {file} (找不到名為 'Request 3' 的工作表 or 無 {config.START_YEAR}-{config.END_YEAR} 之資料)")            
         except ValueError:
             print(f"跳過檔案: {file} (找不到名為 'Request 3' 的工作表)")
         except Exception as e:
