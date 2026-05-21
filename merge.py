@@ -13,6 +13,7 @@ def merge_xlsx():
         return
 
     all_sheets = []
+    processed_countries = set()
     
     print(f"開始處理，共找到 {len(file_list)} 個檔案...")
 
@@ -31,6 +32,7 @@ def merge_xlsx():
                     continue
                 df.insert(loc=4, column='Country', value=country_name)
                 all_sheets.append(df)
+                processed_countries.add(country_name)
                 print(f"成功處理: {file}")
             else:
                 print(f"跳過檔案: {file} (找不到名為 'Request 3' 的工作表 or 無 {config.START_YEAR}-{config.END_YEAR} 之資料)")            
@@ -41,7 +43,7 @@ def merge_xlsx():
     if all_sheets:
         merged_df = pd.concat(all_sheets, ignore_index=True)
         merged_df.to_excel(output_name, index=False)
-        print(f"\n合併完成！結果已儲存至: {output_name}")
+        print(f"\n合併完成！結果已儲存至: {output_name}，成功處理了 {len(processed_countries)} 個國家。")
     else:
         print("\n沒有可合併的資料。")
 
