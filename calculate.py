@@ -63,11 +63,13 @@ def check_reputation(bookrunner, year):
         return np.nan
 
     top_25_underwriters_this_year = top_25_underwriters.get(offer_year, set())
-    
-    for top_bank in top_25_underwriters_this_year:
-        if top_bank in b_str: 
-            return 1
+    bookrunners = [r.strip().upper() for r in str(bookrunner).split(';')]
+    for runner in bookrunners:
+        for underwriter in top_25_underwriters_this_year:
+            if underwriter == runner: 
+                return 1
     return 0
+    
 bookrunners = get_col(df, 'Bookrunner')
 offer_years = get_col(df, 'Dates: Offer Year (CCYY)')
 df['Underwriter_Reputation'] = [check_reputation(b, y) for b, y in zip(bookrunners, offer_years)]
