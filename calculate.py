@@ -4,10 +4,20 @@ import config
 
 df = pd.read_excel(config.UNIQUE_OUTPUT)
 underwriter_df = pd.read_excel(config.TOP25_UNDERWRITERS)
-top_25_underwriters = set(underwriter_df.iloc[:, 0].dropna().astype(str).str.upper().unique())
+top_25_underwriters = {}
+current_year = None
+
+for val in underwriter_df.iloc[:, 0].dropna():
+    val_str = str(val).strip()
+    if val_str.isdigit() and len(val_str) == 4:
+        current_year = int(val_str)
+        top_25_underwriters[current_year] = set()
+    elif current_year is not None:
+        if not val_str.startswith(('Subtotal', 'Industry', 'Source', 'Managing', 'Full', 'Sector')):
+            top_25_underwriters[current_year].add(val_str.upper())
 
 print(f"Columns in filtered SDC file: {df.columns.tolist()}\n")
-print(f"Top 25 underwriters between {config.START_YEAR} and {config.END_YEAR}:\n{top_25_underwriters}\n")
+print(f"Top 25 underwriters: {top_25_underwriters}\n")
 
 def get_col(df, name):
     return df[name] if name in df.columns else pd.Series([np.nan] * len(df))
@@ -43,14 +53,24 @@ def check_firm_commitment(tech):
 df['Firm_Commitment'] = get_col(df, 'Offering Technique').apply(check_firm_commitment)
 
 # 6. Underwriter_Reputation
-def check_reputation(bookrunner):
-    if pd.isna(bookrunner) or str(bookrunner).strip() == '': 
+def check_reputation(bookrunner, year):
+    if pd.isna(bookrunner) or str(bookrunner).strip() == ''or pd.isna(year): 
         return np.nan
     b_str = str(bookrunner).upper()
-    for top_bank in top_25_underwriters:
-        if top_bank in b_str: return 1
+    try:
+        offer_year = int(year)
+    except (ValueError, TypeError):
+        return np.nan
+
+    top_25_underwriters_this_year = top_25_underwriters.get(offer_year, set())
+    
+    for top_bank in top_25_underwriters_this_year:
+        if top_bank in b_str: 
+            return 1
     return 0
-df['Underwriter_Reputation'] = get_col(df, 'Bookrunner').apply(check_reputation)
+bookrunners = get_col(df, 'Bookrunner')
+offer_years = get_col(df, 'Dates: Offer Year (CCYY)')
+df['Underwriter_Reputation'] = [check_reputation(b, y) for b, y in zip(bookrunners, offer_years)]
 
 # 7. Integer_Offer_Price
 def is_integer_price(price):
@@ -63,12 +83,39 @@ def is_integer_price(price):
         return np.nan
 df['Integer_Offer_Price'] = get_col(df, 'Offer Price (USD)').apply(is_integer_price)
 
+# 8. Bookbuilt
+def check_bookbuilt(tech):
+    if pd.isna(tech):
+        return np.nan
+    return 1 if 'BOOKBUILDING' in str(tech).upper() else 0
+df['Bookbuilt'] = get_col(df, 'Pricing Technique').apply(check_bookbuilt)
+
+# 9. IPO_count
+offer_year = get_col(df, 'Dates: Offer Year (CCYY)')
+df['IPO_count'] = df.groupby(offer_year)[offer_year.name].transform('count')
+
+# 10. Price_Stabilization
+small_pos = ((df['Underpricing'] > 0) & (df['Underpricing'] <= 1)).astype(int)
+small_neg = ((df['Underpricing'] < 0) & (df['Underpricing'] >= -1)).astype(int)
+df['Price_Stabilization'] = (
+    small_pos.groupby(offer_year).transform('sum') - small_neg.groupby(offer_year).transform('sum')
+) / df['IPO_count']
+
+# 11. Equity_Carve_out
+def check_equity_carve_out(pct):
+    if pd.isna(pct):
+        return np.nan
+    return 1 if pct > 20 else 0
+pct_owned = pd.to_numeric(get_col(df, 'Spinoff (Equity Carveout) Company: Pct Owned by Parent After Spinoff'), errors='coerce')
+df['Equity_Carve_out'] = pct_owned.apply(check_equity_carve_out)
+
 calculated_cols = ['Underpricing', 'Ln_Age', 'Relative_Offer_Size', 'VC_backed', 
-                   'Firm_Commitment', 'Underwriter_Reputation', 'Integer_Offer_Price']
+                   'Firm_Commitment', 'Underwriter_Reputation', 'Integer_Offer_Price',
+                   'Bookbuilt', 'IPO_count', 'Price_Stabilization', 'Equity_Carve_out']
 id_cols = ['Issuer/Borrower SEDOL', 'ISIN', 'Datastream']
 year_col = ['Dates: Offer Year (CCYY)']
 output_cols = calculated_cols + id_cols + year_col
 
 df_final = df[output_cols]
 df_final.to_excel(config.CALCULATED_OUTPUT, index=False)
-print(f"結果已儲存至: {config.CALCULATED_OUTPUT}")
+print(f"Results saved as: {config.CALCULATED_OUTPUT}")

@@ -50,5 +50,9 @@
   - Firm_Commitment
   - Underwriter_Reputation
   - Integer_Offer_Price
+  - Bookbuilt: encode 1 if `Pricing Technique` = "Bookbuilding"
+  - IPO_count: total number of IPOs in the issue year
+  - Price_Stabilization: Difference in the number of IPOs with first-day returns between 0% and 1% and the number of IPOs with first-day returns between −1% and 0%, divided by the total number of IPOs issued in a country, where first-day returns = `Percent Change Offer Price to Closing Price at Offer/First Trade`
+  - Equity_Carve_out: encode 1 if `Spinoff (Equity Carveout) Company: Pct Owned by Parent After Spinoff` > 20
 - **Input**: `Filtered_All_countries_SDC_2015-2024.xlsx`
 - **Output**: `Calculated_All_countries_SDC_2015-2024.xlsx`
