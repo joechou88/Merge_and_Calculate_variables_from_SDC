@@ -51,7 +51,7 @@
   - Underwriter_Reputation: encode 1 if `Bookrunner` is in the top-25 bookrunner league table ranked by `Proceeds Amount All Markets`
   - Integer_Offer_Price: encode 1 if `Offer Price (USD)` is an integer
   - Bookbuilt: encode 1 if `Pricing Technique` = "Bookbuilding"
-  - IPO_count: total number of IPOs in the issue year
+  - IPO_count: total number of IPOs for a given country in the issue year，之後併進 Stata 再除以 Worldscope 當年該國的公司數取 log 就可以算出 `IPO_Activities`
   - Price_Stabilization: Difference in the number of IPOs with first-day returns between 0% and 1% and the number of IPOs with first-day returns between −1% and 0%, divided by the total number of IPOs issued in a country, where first-day returns = `Percent Change Offer Price to Closing Price at Offer/First Trade`
   - Equity_Carve_out: encode 1 if `Spinoff (Equity Carveout) Company: Pct Owned by Parent After Spinoff` > 20
 - **Input**: `Filtered_All_countries_SDC_2015-2024.xlsx`
