@@ -33,8 +33,7 @@ df['Ln_Age'] = age.apply(lambda x: np.log1p(x) if pd.notna(x) and x >= 0 else (n
 
 # 3. Relative_Offer_Size
 proceeds = pd.to_numeric(get_col(df, 'Proceeds Amount All Markets (USD Millions)'), errors='coerce')
-assets = pd.to_numeric(get_col(df, 'Financials: Total Assets Before Offering (USD Millions)'), errors='coerce')
-df['Relative_Offer_Size'] = proceeds / assets
+df['Relative_Offer_Size'] = proceeds * 1000
 df['Relative_Offer_Size'] = df['Relative_Offer_Size'].replace([np.inf, -np.inf], np.nan)    # Replace infinite values with NaN since Stata cannot handle inf
 
 # 4. VC_backed
@@ -56,7 +55,6 @@ df['Firm_Commitment'] = get_col(df, 'Offering Technique').apply(check_firm_commi
 def check_reputation(bookrunner, year):
     if pd.isna(bookrunner) or str(bookrunner).strip() == ''or pd.isna(year): 
         return np.nan
-    b_str = str(bookrunner).upper()
     try:
         offer_year = int(year)
     except (ValueError, TypeError):
@@ -92,16 +90,15 @@ def check_bookbuilt(tech):
     return 1 if 'BOOKBUILDING' in str(tech).upper() else 0
 df['Bookbuilt'] = get_col(df, 'Pricing Technique').apply(check_bookbuilt)
 
-# 9. IPO_count
+# 9. IPO_Activities
 offer_year = get_col(df, 'Dates: Offer Year (CCYY)')
-df['IPO_count'] = df.groupby(offer_year)[offer_year.name].transform('count')
+country = get_col(df, 'Country')
+df['IPO_count'] = df.groupby([country, offer_year])[country].transform('count')
 
 # 10. Price_Stabilization
-small_pos = ((df['Underpricing'] > 0) & (df['Underpricing'] <= 1)).astype(int)
-small_neg = ((df['Underpricing'] < 0) & (df['Underpricing'] >= -1)).astype(int)
-df['Price_Stabilization'] = (
-    small_pos.groupby(offer_year).transform('sum') - small_neg.groupby(offer_year).transform('sum')
-) / df['IPO_count']
+small_pos = ((df['Underpricing'] > 0) & (df['Underpricing'] <= 1)).astype(int).groupby([country, offer_year]).transform('sum')
+small_neg = ((df['Underpricing'] < 0) & (df['Underpricing'] >= -1)).astype(int).groupby([country, offer_year]).transform('sum')
+df['Price_Stabilization'] = (small_pos - small_neg) / df['IPO_count']
 
 # 11. Equity_Carve_out
 def check_equity_carve_out(pct):
