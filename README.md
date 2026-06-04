@@ -10,11 +10,9 @@
 #### 2. Columns Filtering (`column_filter.py`)
 - **Objective**:
   - filter dataframe columns to retain only the predefined `TARGET_COLUMNS`
-  - retain only IPO records
+  - Exclude Non-IPO records
     - `Original IPO Flag` = TRUE
     - `Main Tranche within Package flag` = TRUE
-    - 排除金融機構：Exclude `Issuer/Borrower Primary SIC (Code)` 介於 6000–6999 的公司
-    - 排除公用事業：Exclude `Issuer/Borrower Primary SIC (Code)` 介於 4900–4949 的公司
     - 排除空殼公司：Exclude `Blank Check (SPAC) Involvement Y/N:` = TRUE
     - 排除單位發行：Exclude `Unit Issues: Unit Issue Flag` = TRUE
     - 排除存託憑證：Exclude `Depositary Issue Flag` = TRUE
@@ -24,6 +22,9 @@
     - 排除有限合夥：Exclude `Limited Partnership Flag (Y/N)` = TRUE
     - 排除私募：Exclude `Private Placement Flag` = TRUE
     - 排除公營事業民營化：Exclude `Spinoff (Equity Carveout) Type (Code)` = P
+  - Exclude particular industries
+    - 排除金融機構：Exclude `Issuer/Borrower Primary SIC (Code)` 介於 6000–6999 的公司
+    - 排除公用事業：Exclude `Issuer/Borrower Primary SIC (Code)` 介於 4900–4949 的公司 
 - **Input**: `Merged_All_countries_SDC_2015-2024.xlsx`
 - **Output**: `Filtered_All_countries_SDC_2015-2024.xlsx`
 #### 3. Company Uniqueness Check (`check_company_uniqueness.py`)
