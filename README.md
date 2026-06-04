@@ -43,13 +43,13 @@
 #### 5. Variable Calculation (`calculate.py`)
 - **Objective**: calculate variables to be served as statistical model input
 - **Variables**
-  - Underpricing
-  - Ln_Age
-  - Relative_Offer_Size
-  - VC_backed
-  - Firm_Commitment
-  - Underwriter_Reputation
-  - Integer_Offer_Price
+  - Underpricing: `Percent Change Offer Price to Closing Price at Offer/First Trade` ≈ (`Stock Price at Close of Offer/First Trade (USD)` - `Offer Price (USD)`) / `Offer Price (USD)`
+  - Ln_Age: log(1 + (`Dates: Issue Date` - `Issuer/Borrower Founded Date`) / 365.25)
+  - Relative_Offer_Size: `Proceeds Amount All Markets (USD Millions)`*1000，之後併進 Stata 再用 Worldscope 去年底的 `Total_assets` (USD thousands) 平減
+  - VC_backed: encode 1 if `Venture Capital Backed IPO Issue Flag` is TRUE
+  - Firm_Commitment: encode 1 if `Offering Technique` contains `Firm Commitment`
+  - Underwriter_Reputation: encode 1 if `Bookrunner` is in the top-25 bookrunner league table ranked by `Proceeds Amount All Markets`
+  - Integer_Offer_Price: encode 1 if `Offer Price (USD)` is an integer
   - Bookbuilt: encode 1 if `Pricing Technique` = "Bookbuilding"
   - IPO_count: total number of IPOs in the issue year
   - Price_Stabilization: Difference in the number of IPOs with first-day returns between 0% and 1% and the number of IPOs with first-day returns between −1% and 0%, divided by the total number of IPOs issued in a country, where first-day returns = `Percent Change Offer Price to Closing Price at Offer/First Trade`
