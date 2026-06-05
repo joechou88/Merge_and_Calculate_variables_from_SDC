@@ -91,14 +91,16 @@ def check_bookbuilt(tech):
 df['Bookbuilt'] = get_col(df, 'Pricing Technique').apply(check_bookbuilt)
 
 # 9. IPO_Activities
-offer_year = get_col(df, 'Dates: Offer Year (CCYY)')
-country = get_col(df, 'Country')
+offer_year = 'Dates: Offer Year (CCYY)'
+country = 'Issuer/Borrower Nation'
 df['IPO_count'] = df.groupby([country, offer_year])[country].transform('count')
 
 # 10. Price_Stabilization
-small_pos = ((df['Underpricing'] > 0) & (df['Underpricing'] <= 1)).astype(int).groupby([country, offer_year]).transform('sum')
-small_neg = ((df['Underpricing'] < 0) & (df['Underpricing'] >= -1)).astype(int).groupby([country, offer_year]).transform('sum')
-df['Price_Stabilization'] = (small_pos - small_neg) / df['IPO_count']
+small_pos = ((df['Underpricing'] > 0) & (df['Underpricing'] <= 1)).astype(int)
+small_neg = ((df['Underpricing'] < 0) & (df['Underpricing'] >= -1)).astype(int)
+small_pos_sum = small_pos.groupby([df[country], df[offer_year]]).transform('sum')
+small_neg_sum = small_neg.groupby([df[country], df[offer_year]]).transform('sum')
+df['Price_Stabilization'] = (small_pos_sum - small_neg_sum) / df['IPO_count']
 
 # 11. Equity_Carve_out
 def check_equity_carve_out(pct):
