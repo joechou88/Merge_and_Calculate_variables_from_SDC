@@ -30,6 +30,8 @@
 - **Input**: `Merged_All_countries_SDC_2015-2024.xlsx`
 - **Output**: `Filtered_All_countries_SDC_2015-2024.xlsx`
 #### 3. Company Uniqueness Check (`check_company_uniqueness.py`)
+<img width="418" height="91" alt="image" src="https://github.com/user-attachments/assets/7a231431-fbc6-4a68-8c68-234c9bde5a84" />
+
 - **Objective**:
   - Ensures each company should ideally have only one IPO record.
   - Identifies and list duplicate company to help a deeper investigation into why duplicates exist
