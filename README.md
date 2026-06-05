@@ -24,7 +24,9 @@
     - 排除公營事業民營化：Exclude `Spinoff (Equity Carveout) Type (Code)` = P
   - Exclude particular industries
     - 排除金融機構：Exclude `Issuer/Borrower Primary SIC (Code)` 介於 6000–6999 的公司
-    - 排除公用事業：Exclude `Issuer/Borrower Primary SIC (Code)` 介於 4900–4949 的公司 
+    - 排除公用事業：Exclude `Issuer/Borrower Primary SIC (Code)` 介於 4900–4949 的公司
+  <img width="649" height="236" alt="image" src="https://github.com/user-attachments/assets/04245cc3-5485-418a-a714-116b8768589f" />
+
 - **Input**: `Merged_All_countries_SDC_2015-2024.xlsx`
 - **Output**: `Filtered_All_countries_SDC_2015-2024.xlsx`
 #### 3. Company Uniqueness Check (`check_company_uniqueness.py`)
