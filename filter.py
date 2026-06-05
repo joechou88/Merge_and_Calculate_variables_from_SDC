@@ -16,7 +16,7 @@ def filter():
         if missing_cols:
             print(f"Warning: Cannot find columns:\n{missing_cols}")
 
-        condition_filters = [
+        non_ipo_filters = [
             (
                 "Original IPO Flag", 
                 lambda d: d["Original IPO Flag"] == True, 
@@ -26,16 +26,6 @@ def filter():
                 "Main Tranche within Package flag", 
                 lambda d: d["Main Tranche within Package flag"] == True, 
                 "Main Tranche within Package flag == TRUE"
-            ),
-            (
-                "Issuer/Borrower Primary SIC (Code)", 
-                lambda d: ~pd.to_numeric(d["Issuer/Borrower Primary SIC (Code)"], errors='coerce').between(6000, 6999), 
-                "Exclude 金融機構 (SIC 6000–6999)"
-            ),
-            (
-                "Issuer/Borrower Primary SIC (Code)", 
-                lambda d: ~pd.to_numeric(d["Issuer/Borrower Primary SIC (Code)"], errors='coerce').between(4900, 4949), 
-                "Exclude 公用事業 (SIC 4900–4949)"
             ),
             (
                 "Blank Check (SPAC) Involvement Y/N:", 
@@ -84,7 +74,21 @@ def filter():
             )
         ]
 
-        for column, function, description in condition_filters:
+        industry_filters = [
+            (
+                "Issuer/Borrower Primary SIC (Code)", 
+                lambda d: ~pd.to_numeric(d["Issuer/Borrower Primary SIC (Code)"], errors='coerce').between(6000, 6999), 
+                "Exclude 金融機構 (SIC 6000–6999)"
+            ),
+            (
+                "Issuer/Borrower Primary SIC (Code)", 
+                lambda d: ~pd.to_numeric(d["Issuer/Borrower Primary SIC (Code)"], errors='coerce').between(4900, 4949), 
+                "Exclude 公用事業 (SIC 4900–4949)"
+            )
+        ]
+
+        print("\n--- Filtering Non-IPO ---")
+        for column, function, description in non_ipo_filters:
             if column in df.columns:
                 initial_count = len(df)
                 df = df[function(df)]
@@ -93,11 +97,26 @@ def filter():
             else:
                 print(f"Warning: Cannot find column '{column}', skip filtering for: {description}.")
 
-        df_filtered = df[existing_cols]
+        df_non_ipo = df[existing_cols]
+        output_non_ipo = f"Filtered_non_ipo_{config.FILTERED_OUTPUT}"
+        df_non_ipo.to_excel(output_non_ipo, index=False)
+        print(f"-> Saved File 1 (Exclude Non-IPO): {output_non_ipo} | Total rows: {len(df_non_ipo)}")
 
-        df_filtered.to_excel(config.FILTERED_OUTPUT, index=False)
+        print("\n--- Filtering Industries ---")
+        for column, function, description in industry_filters:
+            if column in df.columns:
+                initial_count = len(df)
+                df = df[function(df)]
+                final_count = len(df)
+                print(f"Condition: {description}. Sample size reduced from {initial_count} to {final_count}.")
+            else:
+                print(f"Warning: Cannot find column '{column}', skip filtering for: {description}.")
+
+        df_final = df[existing_cols]
+        df_final.to_excel(config.FILTERED_OUTPUT, index=False)
+        print(f"-> Saved File 2 (Exclude Non-IPO + Financial/Utilities): {config.FILTERED_OUTPUT} | Total rows: {len(df_final)}")
+        
         print(f"\nComplete columns filtering. Remaining number of columns: {len(existing_cols)}")
-        print(f"Saved as: {config.FILTERED_OUTPUT}")
 
     except FileNotFoundError:
         print(f"Error: Cannot find file: {config.MERGED_OUTPUT}.")
