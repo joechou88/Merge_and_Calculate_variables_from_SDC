@@ -7,7 +7,7 @@
 #### 1. Country Integration (`merge.py`)
 - **Objective**: combine all country files in `SDC_xlsx` folder to one single `Merged_All_countries_SDC_2015-2024.xlsx`, except for countries in `EXCLUDE_COUNTRIES`
 - **Output**: `Merged_All_countries_SDC_2015-2024.xlsx`
-#### 2. Columns Filtering (`column_filter.py`)
+#### 2. Filtering (`filter.py`)
 - **Objective**:
   - filter dataframe columns to retain only the predefined `TARGET_COLUMNS`
   - Exclude Non-IPO records

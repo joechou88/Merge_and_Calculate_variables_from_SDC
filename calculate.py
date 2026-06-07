@@ -112,7 +112,8 @@ df['Equity_Carve_out'] = pct_owned.apply(check_equity_carve_out)
 
 calculated_cols = ['Underpricing', 'Ln_Age', 'Relative_Offer_Size', 'VC_backed', 
                    'Firm_Commitment', 'Underwriter_Reputation', 'Integer_Offer_Price',
-                   'Bookbuilt', 'IPO_count', 'Price_Stabilization', 'Equity_Carve_out']
+                   'Bookbuilt', 'IPO_count', 'Price_Stabilization', 'Equity_Carve_out', 
+                   'Dates: Issue Date', 'Offer Price (USD)']
 id_cols = ['Issuer/Borrower SEDOL', 'ISIN', 'Datastream']
 year_col = ['Dates: Offer Year (CCYY)']
 output_cols = calculated_cols + id_cols + year_col
