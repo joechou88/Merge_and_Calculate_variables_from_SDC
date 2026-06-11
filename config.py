@@ -29,7 +29,7 @@ TARGET_COLUMNS = [
     "Dates: Issue Date",
     "Dates: Offer Year (CCYY)",
     "Issuer/Borrower Name Full",
-    "Issuer/Borrower Nation",
+    "Country",
     "Issuer/Borrower Primary SIC (Code)",
     "Issuer/Borrower SEDOL",
     "ISIN",

@@ -92,7 +92,7 @@ df['Bookbuilt'] = get_col(df, 'Pricing Technique').apply(check_bookbuilt)
 
 # 9. IPO_Activities
 offer_year = 'Dates: Offer Year (CCYY)'
-country = 'Issuer/Borrower Nation'
+country = 'Country'
 df['IPO_count'] = df.groupby([country, offer_year])[country].transform('count')
 
 # 10. Price_Stabilization

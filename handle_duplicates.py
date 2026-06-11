@@ -2,7 +2,7 @@ import pandas as pd
 import config
 
 COMPANY  = "Issuer/Borrower Name Full"
-COUNTRY  = "Issuer/Borrower Nation"
+COUNTRY  = "Country"
 DATE     = "Dates: Issue Date"
 PROCEEDS = "Proceeds Amount All Markets (USD Millions)"
 

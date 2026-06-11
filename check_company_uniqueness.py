@@ -2,7 +2,7 @@ import pandas as pd
 import config
 
 COMPANY = "Issuer/Borrower Name Full"
-COUNTRY  = "Issuer/Borrower Nation"
+COUNTRY  = "Country"
 
 def check_uniqueness(filepath):
     print(f"Loading: {filepath}\n")
